@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace Domain.TasksDomain.ValueObjects
 {
-	public class TaskCreatedOn
+	public class TaskCreatedOn(DateOnly createdOn)
 	{
-		public DateOnly CreationDate {  get; private set; }
+		public DateOnly CreationDate {  get; private set; } = createdOn;
 
-		public TaskCreatedOn(DateOnly createdOn)
-		{	
-			CreationDate = createdOn;
-		}
 	}
 }
