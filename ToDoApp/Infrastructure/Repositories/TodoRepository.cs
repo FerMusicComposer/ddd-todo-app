@@ -19,9 +19,9 @@ namespace Infrastructure.Repositories
 			return await _dbContext.Todos.SingleOrDefaultAsync(t => t.Id == id);
 		}
 
-		public Task<IEnumerable<Todo>> GetAllTodosAsync()
+		public async Task<IEnumerable<Todo>> GetAllTodosAsync()
 		{
-			throw new NotImplementedException();
+			return await _dbContext.Todos.ToListAsync();
 		}
 
 		public Task AddTodoAsync(Todo task)

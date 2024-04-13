@@ -14,21 +14,33 @@ public sealed class TodoService
 		_todoRepository = todoRepository;
 	}
 
-	public async Task<Result<Todo>> GetTodoByIDAsync(int id)
+	public async Task<ResultOf<Todo>> GetTodoByIDAsync(int id)
 	{
 		if (id <= 0) 
 		{
-			return Result<Todo>.Failure(TodoErrors.InvalidId);
+			return ResultOf<Todo>.Failure(TodoErrors.InvalidId);
 		}
 
 		var todo = await _todoRepository.GetTodoByIdAsync(id);
 
 		if (todo == null)
 		{
-			return Result<Todo>.Failure(TodoErrors.NotFound);
+			return ResultOf<Todo>.Failure(TodoErrors.NotFound);
 		}
 
-		return Result<Todo>.Success(todo);
+		return ResultOf<Todo>.Success(todo);
+	}
+
+	public async Task<ResultOfCollection<Todo>> GetAllTodosAsync()
+	{
+		var todos = await _todoRepository.GetAllTodosAsync();
+
+		if (todos == null)
+		{
+			return ResultOfCollection<Todo>.Failure(TodoErrors.NotFoundAny);
+		}
+
+		return ResultOfCollection<Todo>.Success(todos);
 	}
 }
 
