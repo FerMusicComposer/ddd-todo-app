@@ -14,27 +14,27 @@ namespace Infrastructure.Repositories
 			_dbContext = dbContext ?? throw new ArgumentNullException(nameof(_dbContext));
 		}
 
-		public async Task<Todo?> GetTaskByIdAsync(int id)
+		public async Task<Todo?> GetTodoByIdAsync(int id)
 		{
 			return await _dbContext.Todos.SingleOrDefaultAsync(t => t.Id == id);
 		}
 
-		public Task<IEnumerable<Todo>> GetAllTasksAsync()
+		public Task<IEnumerable<Todo>> GetAllTodosAsync()
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task AddTaskAsync(Todo task)
+		public Task AddTodoAsync(Todo task)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task UpdateTaskAsync(int id)
+		public Task UpdateTodoAsync(int id)
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task DeleteTaskAsync(int id)
+		public Task DeleteTodoAsync(int id)
 		{
 			throw new NotImplementedException();
 		}

@@ -1,3 +1,6 @@
+using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Reflection;
@@ -5,6 +8,15 @@ using System.Reflection;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContext<ToDoAppDbContext>( options =>
+{
+	var serverName = Environment.MachineName; 
+	string connectionString = builder.Configuration.GetConnectionString("DefaultConnection").Replace("{ServerName}", serverName);
+
+	options.UseSqlServer(connectionString);
+}
+);
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
