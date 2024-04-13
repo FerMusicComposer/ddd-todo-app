@@ -2,7 +2,7 @@
 {
 	public class TodoCreatedOn(DateOnly createdOn)
 	{
-		public DateOnly CreationDate {  get; private set; } = createdOn;
+		public DateOnly CreatedOn {  get; private set; } = createdOn;
 
 	}
 }

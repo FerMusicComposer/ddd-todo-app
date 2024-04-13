@@ -9,6 +9,7 @@ namespace Infrastructure.Data
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
+			modelBuilder.Entity<Todo>().OwnsOne(p => p.CreatedOn);
 			modelBuilder.Entity<Todo>().ToTable("ToDos");
 			modelBuilder.Entity<Todo>().HasKey(t => t.Id);
 			modelBuilder.Entity<Todo>().Property(t => t.Title).IsRequired();

@@ -4,10 +4,10 @@ namespace Domain.ToDo.Repositories
 {
 	public interface ITodoRepository
 	{
-		Task<Todo?> GetTaskByIdAsync(int id);
-		Task<IEnumerable<Todo>> GetAllTasksAsync();
-		Task AddTaskAsync(Todo todo);
-		Task UpdateTaskAsync(int id);
-		Task DeleteTaskAsync(int id);
+		Task<Todo?> GetTodoByIdAsync(int id);
+		Task<IEnumerable<Todo>> GetAllTodosAsync();
+		Task AddTodoAsync(Todo todo);
+		Task UpdateTodoAsync(int id);
+		Task DeleteTodoAsync(int id);
 	}
 }
