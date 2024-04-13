@@ -16,7 +16,7 @@ public sealed class TodoService
 
 	public async Task<ResultOf<Todo>> GetTodoByIDAsync(int id)
 	{
-		if (id <= 0) 
+		if (id <= 0)
 		{
 			return ResultOf<Todo>.Failure(TodoErrors.InvalidId);
 		}
@@ -35,7 +35,7 @@ public sealed class TodoService
 	{
 		var todos = await _todoRepository.GetAllTodosAsync();
 
-		if (todos == null)
+		if (todos == null || !todos.Any())
 		{
 			return ResultOfCollection<Todo>.Failure(TodoErrors.NotFoundAny);
 		}

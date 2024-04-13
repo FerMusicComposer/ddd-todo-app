@@ -91,5 +91,23 @@ public class ToDoDomainServicesTest
 		// Assert
 		Assert.NotNull(result.Values);
 	}
+
+
+	[Fact]
+	public async Task GetAllTodosAsync_ReturnsEmptyCollection_WhenTodosDontExist()
+	{
+		// Arrange
+		var dbContext = CreateDbContext("GetTodoByIdAsync_ReturnsEmptyCollection");
+
+		var todoRepository = new TodoRepository(dbContext);
+		var service = new TodoService(todoRepository);
+
+		// Act
+		var result = await service.GetAllTodosAsync();
+
+		// Assert
+		Assert.False(result.IsSuccess);
+		Assert.Empty(result.Values);
+	}
 }
 
