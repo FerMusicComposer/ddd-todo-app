@@ -1,3 +1,4 @@
+using Application.DTOs;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -16,6 +17,8 @@ builder.Services.AddDbContext<ToDoAppDbContext>( options =>
 	options.UseSqlServer(connectionString);
 }
 );
+
+builder.Services.AddAutoMapper(typeof(AutomapperProfile));
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
