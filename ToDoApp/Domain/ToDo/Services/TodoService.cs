@@ -81,5 +81,17 @@ public sealed class TodoService
 
 		return ResultOf<Todo>.Success(update);
 	}
+
+	public async Task<Result> DeleteTodoAsync(Todo todo)
+	{
+		var result = await _todoRepository.DeleteTodoAsync(todo);
+
+		if (result == null || !result.IsSuccess)
+		{
+			return Result.Failure(TodoErrors.IsNull);
+		}
+
+		return Result.Success();
+	}
 }
 

@@ -1,4 +1,5 @@
-﻿using Domain.ToDo.Entities;
+﻿using Domain.Abstractions;
+using Domain.ToDo.Entities;
 using Domain.ToDo.Repositories;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -42,10 +43,12 @@ namespace Infrastructure.Repositories
 			return updatedTodo;
 		}
 
-		public Task DeleteTodoAsync(int id)
+		public async Task<Result> DeleteTodoAsync(Todo todo)
 		{
-			throw new NotImplementedException();
-		}
+			_dbContext.Todos.Remove(todo);
+			await _dbContext.SaveChangesAsync();
 
+			return Result.Success();
+		}
 	}
 }

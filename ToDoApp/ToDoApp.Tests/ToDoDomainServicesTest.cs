@@ -211,5 +211,24 @@ public class ToDoDomainServicesTest
 	}
 
 	#endregion
+
+	#region DeleteTodo
+
+	[Fact]
+	public async Task DeleteTodoAsync_DeletesTodo_WhenTodoExists() { 
+		var dbContext = CreateDbContext("DeleteTodoAsync_DeletesTodo");
+		var todo = new Todo("Test Title", "This Todo is a test");
+		dbContext.Todos.Add(todo);
+		await dbContext.SaveChangesAsync();
+
+		var repository = new TodoRepository(dbContext);
+		var service = new TodoService(repository);
+
+		var result = await service.DeleteTodoAsync(todo);
+
+		Assert.True(result.IsSuccess);
+	}
+
+	#endregion
 }
 

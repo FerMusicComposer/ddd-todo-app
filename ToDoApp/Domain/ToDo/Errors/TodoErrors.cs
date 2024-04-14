@@ -30,5 +30,6 @@ namespace Domain.ToDo.Errors
 		public static readonly Error NotUpdated = new("Todo.NotUpdated", "Couldn't update Todo. Try again");
 
 		#endregion
+
 	}
 }
