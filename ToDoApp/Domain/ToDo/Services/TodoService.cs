@@ -16,82 +16,117 @@ public sealed class TodoService
 
 	public async Task<ResultOf<Todo>> GetTodoByIDAsync(int id)
 	{
-		if (id <= 0)
+		try
 		{
-			return ResultOf<Todo>.Failure(TodoErrors.InvalidId);
+			if (id <= 0)
+			{
+				return ResultOf<Todo>.Failure(TodoErrors.InvalidId);
+			}
+
+			var todo = await _todoRepository.GetTodoByIdAsync(id);
+
+			if (todo == null)
+			{
+				return ResultOf<Todo>.Failure(TodoErrors.NotFound);
+			}
+
+			return ResultOf<Todo>.Success(todo);
 		}
-
-		var todo = await _todoRepository.GetTodoByIdAsync(id);
-
-		if (todo == null)
+		catch (Exception ex)
 		{
-			return ResultOf<Todo>.Failure(TodoErrors.NotFound);
+			return ResultOf<Todo>.Failure(new Error("Todo.Exception", ex));
 		}
-
-		return ResultOf<Todo>.Success(todo);
 	}
 
 	public async Task<ResultOfCollection<Todo>> GetAllTodosAsync()
 	{
-		var todos = await _todoRepository.GetAllTodosAsync();
-
-		if (todos == null || !todos.Any())
+		try
 		{
-			return ResultOfCollection<Todo>.Failure(TodoErrors.NotFoundAny);
-		}
+			var todos = await _todoRepository.GetAllTodosAsync();
 
-		return ResultOfCollection<Todo>.Success(todos);
+			if (todos == null || !todos.Any())
+			{
+				return ResultOfCollection<Todo>.Failure(TodoErrors.NotFoundAny);
+			}
+
+			return ResultOfCollection<Todo>.Success(todos);
+		}
+		catch (Exception ex)
+		{
+			return ResultOfCollection<Todo>.Failure(new Error("Todo.Exception", ex));
+		}
 	}
 
 	public async Task<ResultOf<Todo>> AddTodoAsync(Todo todo)
 	{
-		if (todo == null)
+		try
 		{
-			return ResultOf<Todo>.Failure(TodoErrors.NotAdded);
-		}
+			if (todo == null)
+			{
+				return ResultOf<Todo>.Failure(TodoErrors.NotAdded);
+			}
 
-		if (string.IsNullOrEmpty(todo.Title))
+			if (string.IsNullOrEmpty(todo.Title))
+			{
+				return ResultOf<Todo>.Failure(TodoErrors.EmptyTitle);
+			}
+
+			var addedTodo = await _todoRepository.AddTodoAsync(todo);
+
+			if (addedTodo == null)
+			{
+				return ResultOf<Todo>.Failure(TodoErrors.NotAdded);
+			}
+
+			return ResultOf<Todo>.Success(addedTodo);
+		}
+		catch (Exception ex)
 		{
-			return ResultOf<Todo>.Failure(TodoErrors.EmptyTitle);
+			return ResultOf<Todo>.Failure(new Error("Todo.Exception", ex));
 		}
-
-		var addedTodo = await _todoRepository.AddTodoAsync(todo);
-
-		if (addedTodo == null)
-		{
-			return ResultOf<Todo>.Failure(TodoErrors.NotAdded);
-		}
-
-		return ResultOf<Todo>.Success(addedTodo);
 	}
 
 	public async Task<ResultOf<Todo>> UpdateTodoAsync(Todo updatedTodo)
 	{
-		if (updatedTodo == null)
+		try
 		{
-			return ResultOf<Todo>.Failure(TodoErrors.IsNull);
+			if (updatedTodo == null)
+			{
+				return ResultOf<Todo>.Failure(TodoErrors.IsNull);
+			}
+
+			var update = await _todoRepository.UpdateTodoAsync(updatedTodo);
+
+			if (update == null)
+			{
+				return ResultOf<Todo>.Failure(TodoErrors.IsNull);
+			}
+
+			return ResultOf<Todo>.Success(update);
 		}
-
-		var update = await _todoRepository.UpdateTodoAsync(updatedTodo);
-
-		if (update == null)
+		catch (Exception ex)
 		{
-			return ResultOf<Todo>.Failure(TodoErrors.IsNull);
+			return ResultOf<Todo>.Failure(new Error("Todo.Exception", ex));
 		}
-
-		return ResultOf<Todo>.Success(update);
 	}
 
 	public async Task<Result> DeleteTodoAsync(Todo todo)
 	{
-		var result = await _todoRepository.DeleteTodoAsync(todo);
-
-		if (result == null || !result.IsSuccess)
+		try
 		{
-			return Result.Failure(TodoErrors.IsNull);
-		}
+			var result = await _todoRepository.DeleteTodoAsync(todo);
 
-		return Result.Success();
+			if (result == null || !result.IsSuccess)
+			{
+				return Result.Failure(TodoErrors.IsNull);
+			}
+
+			return Result.Success();
+		}
+		catch (Exception ex)
+		{
+			return Result.Failure(new Error("Todo.Exception", ex));
+		}
 	}
 }
 

@@ -28,10 +28,9 @@ namespace Infrastructure.Repositories
 		public async Task<Todo> AddTodoAsync(Todo todo)
 		{
 			_dbContext.Todos.Add(todo);
-			_dbContext.SaveChanges();
+			await _dbContext.SaveChangesAsync();
 
-			var latestTodoId = await _dbContext.Todos.Select(t => t.Id).LastAsync();
-			var addedTodo = await _dbContext.Todos.SingleOrDefaultAsync(t => t.Id == latestTodoId);
+			var addedTodo = await _dbContext.Todos.FindAsync(todo.Id);
 
 			return addedTodo;
 		}
@@ -49,6 +48,7 @@ namespace Infrastructure.Repositories
 			await _dbContext.SaveChangesAsync();
 
 			return Result.Success();
+			
 		}
 	}
 }
