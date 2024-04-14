@@ -35,9 +35,11 @@ namespace Infrastructure.Repositories
 			return addedTodo;
 		}
 
-		public Task UpdateTodoAsync(int id)
+		public async Task<Todo> UpdateTodoAsync(Todo updatedTodo)
 		{
-			throw new NotImplementedException();
+			await _dbContext.SaveChangesAsync();
+
+			return updatedTodo;
 		}
 
 		public Task DeleteTodoAsync(int id)

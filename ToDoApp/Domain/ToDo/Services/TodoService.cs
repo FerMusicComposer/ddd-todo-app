@@ -49,6 +49,7 @@ public sealed class TodoService
 		{
 			return ResultOf<Todo>.Failure(TodoErrors.NotAdded);
 		}
+
 		if (string.IsNullOrEmpty(todo.Title))
 		{
 			return ResultOf<Todo>.Failure(TodoErrors.EmptyTitle);
@@ -62,6 +63,23 @@ public sealed class TodoService
 		}
 
 		return ResultOf<Todo>.Success(addedTodo);
+	}
+
+	public async Task<ResultOf<Todo>> UpdateTodoAsync(Todo updatedTodo)
+	{
+		if (updatedTodo == null)
+		{
+			return ResultOf<Todo>.Failure(TodoErrors.IsNull);
+		}
+
+		var update = await _todoRepository.UpdateTodoAsync(updatedTodo);
+
+		if (update == null)
+		{
+			return ResultOf<Todo>.Failure(TodoErrors.IsNull);
+		}
+
+		return ResultOf<Todo>.Success(update);
 	}
 }
 

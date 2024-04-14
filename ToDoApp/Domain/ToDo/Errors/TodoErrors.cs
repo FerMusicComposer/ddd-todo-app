@@ -20,9 +20,15 @@ namespace Domain.ToDo.Errors
 		#region AddTodo
 
 		public static readonly Error EmptyTitle = new("Todo.EmptyTitle", "Todo title cannot be empty");
-		public static readonly Error NotAdded = new("Todo.NotAdded", "Couldn't add Todo. Either there was a proble with the values passed or Todo was null. Try again");
-		
+		public static readonly Error NotAdded = new("Todo.NotAdded", "Couldn't add Todo. Either there was a problem with the values passed or Todo was null. Try again");
+
 		#endregion
 
+		#region UpdateTodo
+
+		public static readonly Error IsNull = new("Todo.IsNull", "Todo cannot be null");
+		public static readonly Error NotUpdated = new("Todo.NotUpdated", "Couldn't update Todo. Try again");
+
+		#endregion
 	}
 }

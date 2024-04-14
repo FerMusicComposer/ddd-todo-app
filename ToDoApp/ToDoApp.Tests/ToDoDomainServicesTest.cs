@@ -17,6 +17,8 @@ public class ToDoDomainServicesTest
 		return new ToDoAppDbContext(optionsBuilder.Options);
 	}
 
+	#region GetTodoById
+
 	[Fact]
 	public async Task GetTodoByIdAsync_ReturnsTodo_WhenTodoExists()
 	{
@@ -66,6 +68,10 @@ public class ToDoDomainServicesTest
 		Assert.Equal(TodoErrors.InvalidId, result.Error);
 	}
 
+	#endregion
+
+	#region GetAllTodos
+
 	[Fact]
 	public async Task GetAllTodosAsync_ReturnsTodosList_WhenTodosExist()
 	{
@@ -110,6 +116,10 @@ public class ToDoDomainServicesTest
 		Assert.Empty(result.Values);
 		Assert.Equal(TodoErrors.NotFoundAny, result.Error);
 	}
+
+	#endregion
+
+	#region AddTodo
 
 	[Fact]
 	public async Task AddTodoAsync_AddsTodoToDb_WhenTitleIsNotEmpty()
@@ -156,5 +166,50 @@ public class ToDoDomainServicesTest
 		Assert.False(result.IsSuccess);
 		Assert.Equal(TodoErrors.NotAdded, result.Error);
 	}
+
+	#endregion
+
+	#region UpdateTodo
+
+	[Fact]
+	public async Task UpdateTodoAsync_UpdatesTodo_WhenChangesWereMade()
+	{
+		var dbContext = CreateDbContext("UpdateTodoAsync_UpdatesTodo");
+		var todo = new Todo("Test Title", "This Todo is a test");
+		dbContext.Todos.Add(todo);
+		await dbContext.SaveChangesAsync();
+
+		var repository = new TodoRepository(dbContext);
+		var service = new TodoService(repository);
+
+		var originalTitle = todo.Title;
+		var originalDescription = todo.Description;
+
+		var updatedTodo = todo;
+		updatedTodo.Title = "Updated title";
+		updatedTodo.Description = "Updated description";
+
+		var result = await service.UpdateTodoAsync(updatedTodo);
+
+		Assert.NotNull(result.Value);
+		Assert.NotEqual(originalTitle, updatedTodo.Title);
+		Assert.NotEqual(originalDescription, updatedTodo.Description);
+	}
+
+	[Fact]
+	public async Task UpdateTodoAsync_ReturnsNullError_WhenTodoIsNull()
+	{
+		var dbContext = CreateDbContext("UpdateTodoAsync_DoesntUpdateTodo");
+
+		var repository = new TodoRepository(dbContext);
+		var service = new TodoService(repository);
+
+		var result = await service.UpdateTodoAsync(null) ;
+
+		Assert.False(result.IsSuccess);
+		Assert.Equal(TodoErrors.IsNull, result.Error);
+	}
+
+	#endregion
 }
 
