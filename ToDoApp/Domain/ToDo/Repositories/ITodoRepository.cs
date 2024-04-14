@@ -6,7 +6,7 @@ namespace Domain.ToDo.Repositories
 	{
 		Task<Todo?> GetTodoByIdAsync(int id);
 		Task<IEnumerable<Todo>> GetAllTodosAsync();
-		Task AddTodoAsync(Todo todo);
+		Task<Todo> AddTodoAsync(Todo todo);
 		Task UpdateTodoAsync(int id);
 		Task DeleteTodoAsync(int id);
 	}

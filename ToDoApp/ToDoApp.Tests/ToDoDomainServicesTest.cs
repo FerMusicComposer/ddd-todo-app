@@ -21,7 +21,7 @@ public class ToDoDomainServicesTest
 	public async Task GetTodoByIdAsync_ReturnsTodo_WhenTodoExists()
 	{
 		var dbContext = CreateDbContext("GetTodoByIdAsync_ReturnsTodo");
-		var todo = new Todo(1, "Test Title", "This Todo is a test");
+		var todo = new Todo("Test Title", "This Todo is a test");
 		dbContext.Todos.Add(todo);
 		dbContext.SaveChanges();
 
@@ -70,14 +70,14 @@ public class ToDoDomainServicesTest
 	public async Task GetAllTodosAsync_ReturnsTodosList_WhenTodosExist()
 	{
 		// Arrange
-		var dbContext = CreateDbContext("GetTodoByIdAsync_ReturnsTodos");
+		var dbContext = CreateDbContext("GetAllTodosAsync_ReturnsTodosList");
 		var todos = new List<Todo>
 		{
-			new(1, "Test Todo 1", "Test description 1"),
-			new(2, "Test Todo 2", "Test description 2"),
-			new(3, "Test Todo 3", "Test description 3"),
-			new(4, "Test Todo 4", "Test description 4"),
-			new(5, "Test Todo 5", "Test description 5"),
+			new("Test Todo 1", "Test description 1"),
+			new("Test Todo 2", "Test description 2"),
+			new("Test Todo 3", "Test description 3"),
+			new("Test Todo 4", "Test description 4"),
+			new("Test Todo 5", "Test description 5"),
 		};
 		dbContext.Todos.AddRange(todos);
 		dbContext.SaveChanges();
@@ -97,7 +97,7 @@ public class ToDoDomainServicesTest
 	public async Task GetAllTodosAsync_ReturnsEmptyCollection_WhenTodosDontExist()
 	{
 		// Arrange
-		var dbContext = CreateDbContext("GetTodoByIdAsync_ReturnsEmptyCollection");
+		var dbContext = CreateDbContext("GetAllTodosAsync_ReturnsEmptyCollection");
 
 		var todoRepository = new TodoRepository(dbContext);
 		var service = new TodoService(todoRepository);
@@ -108,6 +108,53 @@ public class ToDoDomainServicesTest
 		// Assert
 		Assert.False(result.IsSuccess);
 		Assert.Empty(result.Values);
+		Assert.Equal(TodoErrors.NotFoundAny, result.Error);
+	}
+
+	[Fact]
+	public async Task AddTodoAsync_AddsTodoToDb_WhenTitleIsNotEmpty()
+	{
+		var dbContext = CreateDbContext("AddTodoAsync_AddsTodoToDb");
+		var todo = new Todo("Test Title", "This Todo is a test");
+
+		var repository = new TodoRepository(dbContext);
+		var service = new TodoService(repository);
+
+		var result = await service.AddTodoAsync(todo);
+
+		Assert.NotNull(result.Value);
+		Assert.Equal(todo.Id, result.Value.Id);
+	}
+
+	[Fact]
+	public async Task AddTodoAsync_DoesntAddTodoToDb_WhenTitleIsEmpty()
+	{
+		var dbContext = CreateDbContext("AddTodoAsync_DoesntAddTodoToDb");
+		var todo = new Todo("", "This Todo is a test");
+
+		var repository = new TodoRepository(dbContext);
+		var service = new TodoService(repository);
+
+		var result = await service.AddTodoAsync(todo);
+
+		Assert.False(result.IsSuccess);
+		Assert.Equal(TodoErrors.EmptyTitle, result.Error);
+	}
+
+
+	[Fact]
+	public async Task AddTodoAsync_DoesntAddTodoToDb_WhenTodoIsNull()
+	{
+		var dbContext = CreateDbContext("AddTodoAsync_DoesntAddTodoToDb");
+		Todo? todo = null;
+
+		var repository = new TodoRepository(dbContext);
+		var service = new TodoService(repository);
+
+		var result = await service.AddTodoAsync(todo);
+
+		Assert.False(result.IsSuccess);
+		Assert.Equal(TodoErrors.NotAdded, result.Error);
 	}
 }
 

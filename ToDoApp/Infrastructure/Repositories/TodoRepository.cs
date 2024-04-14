@@ -24,9 +24,15 @@ namespace Infrastructure.Repositories
 			return await _dbContext.Todos.ToListAsync();
 		}
 
-		public Task AddTodoAsync(Todo task)
+		public async Task<Todo> AddTodoAsync(Todo todo)
 		{
-			throw new NotImplementedException();
+			_dbContext.Todos.Add(todo);
+			_dbContext.SaveChanges();
+
+			var latestTodoId = await _dbContext.Todos.Select(t => t.Id).LastAsync();
+			var addedTodo = await _dbContext.Todos.SingleOrDefaultAsync(t => t.Id == latestTodoId);
+
+			return addedTodo;
 		}
 
 		public Task UpdateTodoAsync(int id)

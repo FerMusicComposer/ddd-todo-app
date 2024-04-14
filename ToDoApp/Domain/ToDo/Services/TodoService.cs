@@ -42,5 +42,26 @@ public sealed class TodoService
 
 		return ResultOfCollection<Todo>.Success(todos);
 	}
+
+	public async Task<ResultOf<Todo>> AddTodoAsync(Todo todo)
+	{
+		if (todo == null)
+		{
+			return ResultOf<Todo>.Failure(TodoErrors.NotAdded);
+		}
+		if (string.IsNullOrEmpty(todo.Title))
+		{
+			return ResultOf<Todo>.Failure(TodoErrors.EmptyTitle);
+		}
+
+		var addedTodo = await _todoRepository.AddTodoAsync(todo);
+
+		if (addedTodo == null)
+		{
+			return ResultOf<Todo>.Failure(TodoErrors.NotAdded);
+		}
+
+		return ResultOf<Todo>.Success(addedTodo);
+	}
 }
 
