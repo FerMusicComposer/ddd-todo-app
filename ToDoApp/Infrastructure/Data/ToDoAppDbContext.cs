@@ -3,9 +3,11 @@ using Domain.ToDo.Entities;
 
 namespace Infrastructure.Data
 {
-	public class ToDoAppDbContext(DbContextOptions<ToDoAppDbContext> options) : DbContext(options)
+	public class ToDoAppDbContext: DbContext
 	{
 		public DbSet<Todo> Todos { get; set; }
+
+		public ToDoAppDbContext(DbContextOptions<ToDoAppDbContext> options) : base(options) { }
 
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
@@ -17,6 +19,8 @@ namespace Infrastructure.Data
 				entity.OwnsOne(e => e.CreatedOn);
 				entity.ToTable("Todos");
 			});
+
+
 		}
 	}
 }

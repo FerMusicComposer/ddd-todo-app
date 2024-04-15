@@ -12,7 +12,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ToDoAppDbContext>( options =>
 {
 	var serverName = Environment.MachineName; 
-	string connectionString = builder.Configuration.GetConnectionString("DefaultConnection").Replace("{ServerName}", serverName);
+	string connectionString = builder.Configuration.GetConnectionString("ToDoApp").Replace("{ServerName}", serverName);
 
 	options.UseSqlServer(connectionString);
 }
