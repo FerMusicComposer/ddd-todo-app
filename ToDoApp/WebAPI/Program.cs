@@ -1,10 +1,13 @@
 using Application.DTOs;
+using Application.Interfaces;
+using Application.Services;
 using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Reflection;
+using WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +37,7 @@ builder.Services.AddSwaggerGen(options =>
 	options.EnableAnnotations();
 });
 
+builder.Services.AddSingleton<ITodoApplicationServices, TodoApplicationServices>();
 
 var app = builder.Build();
 
@@ -46,6 +50,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+ApiEndpoints.MapTodoEndpoints(app);
 
 app.Run();
 

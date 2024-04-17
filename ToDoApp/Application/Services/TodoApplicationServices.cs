@@ -1,4 +1,5 @@
 ﻿using Application.DTOs;
+using Application.Interfaces;
 using AutoMapper;
 using Domain.Abstractions;
 using Domain.ToDo.Entities;
@@ -6,7 +7,7 @@ using Domain.ToDo.Services;
 
 namespace Application.Services
 {
-	public class TodoApplicationServices
+	public class TodoApplicationServices : ITodoApplicationServices
 	{
 		private readonly TodoService _todoService;
 		private readonly IMapper _mapper;
@@ -127,11 +128,11 @@ namespace Application.Services
 
 		}
 
-		public async Task<Result> DeleteTodoAsync(TodoDTO todoToremove)
+		public async Task<Result> DeleteTodoAsync(TodoDTO todoToRemove)
 		{
 			try
 			{
-				var todo = _mapper.Map<Todo>(todoToremove);
+				var todo = _mapper.Map<Todo>(todoToRemove);
 				var result = await _todoService.DeleteTodoAsync(todo);
 
 				if (result == null)
